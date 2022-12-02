@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
@@ -30,12 +30,12 @@ def foo():
     data = request.get_json()
     filename = data['filename']
     with open(f'data/{filename}') as file:
-        file_data = file.readlines()
+        file_data = file
         first_result = getattr(Controller, data['cmd1'])(file_data, data["value1"])
         if not data.get('cmd2', None):
-            return first_result
+            return jsonify(first_result)
         result2 = getattr(Controller, data['cmd2'])(first_result, data["value2"])
-        return result2
+        return jsonify(result2)
 
 
 app.run()
