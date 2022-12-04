@@ -1,4 +1,5 @@
 import re
+from typing import Sequence
 
 from flask import Flask, request, jsonify
 
@@ -7,27 +8,27 @@ app: Flask = Flask(__name__)
 
 class Controller:
     @staticmethod
-    def map(data: iter, parameter: str) -> list[str]:
+    def map(data: Sequence[str], parameter: str) -> list[str]:
         return list(map(lambda x: x.split()[int(parameter)].replace('\"', ""), data))
 
     @staticmethod
-    def filter(data: iter, parameter: str) -> list[str]:
+    def filter(data: Sequence[str], parameter: str) -> list[str]:
         return list(filter(lambda string: parameter in string, data))
 
     @staticmethod
-    def unique(data: iter, parameter: str) -> list[str]:
+    def unique(data: Sequence[str], parameter: str) -> list[str]:
         return list(set(data))
 
     @staticmethod
-    def sort(data: iter, parameter: str) -> list[str]:
+    def sort(data: Sequence[str], parameter: str) -> list[str]:
         return sorted(data, reverse=True if parameter == 'desk' else False)
 
     @staticmethod
-    def limit(data: iter, parameter: int) -> list[str]:
-        return data[:int(parameter)]
+    def limit(data: Sequence[str], parameter: int) -> list[str]:
+        return list(data[:int(parameter)])
 
     @staticmethod
-    def regex(data: iter, parameter: str) -> list[str]:
+    def regex(data: Sequence[str], parameter: str) -> list[str]:
         pattern = re.compile(f'{parameter}')
         return [i for i in data if re.match(pattern, i)]
 
